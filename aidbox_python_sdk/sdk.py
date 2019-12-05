@@ -1,7 +1,8 @@
 import logging
 import asyncio
-from aidboxpy import AsyncAidboxClient
 from fhirpy.base.exceptions import ResourceNotFound
+from fhirpy import SyncFHIRClient
+
 from aiohttp import BasicAuth
 from .db import DBProxy
 
@@ -41,8 +42,8 @@ class SDK(object):
         basic_auth = BasicAuth(
             login=config['client']['id'],
             password=config['client']['secret'])
-        self.client = AsyncAidboxClient('{}'.format(config['box']['base-url']),
-            authorization=basic_auth.encode())
+        self.client = SyncFHIRClient('{}'.format(config['box']['base-url']),
+                                   authorization=basic_auth.encode())
         await self._create_seed_resources()
         self._initialized = True
         if callable(self._on_ready):
