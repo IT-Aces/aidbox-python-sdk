@@ -6,4 +6,4 @@ pytest==4.0.1
 SQLAlchemy==1.2.18
 git+git://github.com/beda-software/base-fhir-py.git@21ca48a6dde2bb7ee2a6790629ebb6492fbafc46
 git+git://github.com/beda-software/aidbox-py.git@49d6b7c711708d54d965bff86d3000dbd6b1f220
-git+git://github.com/beda-software/fhir-py.git@4c0f46b5e037bcae9cee36484402645958e013c0
+git+git://github.com/beda-software/fhir-py.git@master

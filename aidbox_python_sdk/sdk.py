@@ -1,6 +1,7 @@
 import logging
 import asyncio
 from fhirpy.base.exceptions import ResourceNotFound
+from fhirpy import AsyncFHIRClient
 from fhirpy import SyncFHIRClient
 
 from aiohttp import BasicAuth
@@ -42,7 +43,9 @@ class SDK(object):
         basic_auth = BasicAuth(
             login=config['client']['id'],
             password=config['client']['secret'])
-        self.client = SyncFHIRClient('{}'.format(config['box']['base-url']),
+        self.client = AsyncFHIRClient('{}'.format(config['box']['base-url']),
+                                   authorization=basic_auth.encode())
+        self.sync_client = SyncFHIRClient('{}'.format(config['box']['base-url']),
                                    authorization=basic_auth.encode())
         await self._create_seed_resources()
         self._initialized = True
