@@ -37,6 +37,7 @@ class SDK(object):
         self._app_endpoint_name = '{}-endpoint'.format(settings.APP_ID)
         self._initialized = False
         self.client = None
+        self.sync_client = None
         self.db = DBProxy(self._settings)
 
     async def init_client(self, config):
@@ -44,11 +45,12 @@ class SDK(object):
             login=config['client']['id'],
             password=config['client']['secret'])
         self.client = AsyncFHIRClient('{}'.format(config['box']['base-url']),
-                                   authorization=basic_auth.encode())
+                                      authorization=basic_auth.encode())
         self.sync_client = SyncFHIRClient('{}'.format(config['box']['base-url']),
-                                   authorization=basic_auth.encode())
+                                          authorization=basic_auth.encode())
         await self._create_seed_resources()
         self._initialized = True
+
         if callable(self._on_ready):
             result = self._on_ready()
             if asyncio.iscoroutine(result):
@@ -96,8 +98,9 @@ class SDK(object):
         return self._subscription_handlers.get(path)
 
     def operation(self, methods, path, public=False, access_policy=None):
-        if public == True and access_policy is not None:
+        if public is True and access_policy is not None:
             raise ValueError('Operation might be public or have access policy, not both')
+
         def wrap(func):
             if not isinstance(path, list):
                 raise ValueError('`path` must be a list')
